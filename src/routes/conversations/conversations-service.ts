@@ -9,6 +9,7 @@ export function replyMessageToConversation(id: string, message: string) {
     }, function (err, response) {
         if (err) {
             console.log(err);
+            return;
         }
         console.log(response);
     });
@@ -26,6 +27,7 @@ export function replyImageToConversation(id: string, url: string, caption) {
     }, function (err, response) {
         if (err) {
             console.log(err);
+            return;
         }
         console.log(response);
     });
@@ -43,6 +45,7 @@ export function replyFileToConversation(id: string, url: string, caption) {
     }, function (err, response) {
         if (err) {
             console.log(err);
+            return;
         }
         console.log(response);
     });
@@ -60,13 +63,13 @@ export function replyAudioToConversation(id: string, url: string, caption) {
     }, function (err, response) {
         if (err) {
             console.log(err);
+            return;
         }
         console.log(response);
     });
 }
 
 export function createNewConversationByChannel(number: string, channelId: string) {
-    console.log(number);
     messagebird.conversations.start({
         to: number,
         channelId: channelId,
@@ -76,8 +79,39 @@ export function createNewConversationByChannel(number: string, channelId: string
         }
     }, function (err, response) {
         if (err) {
-            return console.log(err);
+            console.log(err);
+            return;
         }
         console.log(response);
     });
+}
+
+export function createNewWebhook(events: string[], channelId: string, url: string){
+    messagebird.conversations.webhooks.create({events, channelId, url}, function(err, response){
+        if(err){
+            console.log(err)
+            return;
+        }
+        console.log(response);
+    })
+}
+
+export function deleteWebhook(id:string){
+    messagebird.conversations.webhooks.delete(id, function(err, response){
+        if(err){
+            console.log(err)
+            return;
+        }
+        console.log(response);
+    })
+}
+
+export function getAllWebhooks(){
+    messagebird.conversations.webhooks.list(100, 0, function(err, response){
+        if(err){
+            console.log(err)
+            return;
+        }
+        console.log(response);
+    })
 }
