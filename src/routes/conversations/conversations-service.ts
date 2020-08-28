@@ -1,7 +1,7 @@
 import messagebird from '../../utils/message-bird';
 import { BASE_MESSSAGE_BIRD } from '../../config';
 import Axios from 'axios';
-import { response } from 'express';
+const Conversation = require('../../models/Conversation')
 
 export async function replyMessageToConversation(id: string, message: string) {
     try {
@@ -100,4 +100,14 @@ export function getAllWebhooks() {
         }
         console.log(response);
     })
+}
+
+export async function createConversation(conversation:any){
+    try{
+        const newConversation = new Conversation(conversation);
+        const createdConversation =  await newConversation.save();
+        return createdConversation;
+    }catch(err){
+        return err;
+    }
 }

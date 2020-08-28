@@ -129,6 +129,8 @@ exports.router.post('/event', (req, res, next) => __awaiter(void 0, void 0, void
                 const res = yield messages_service_1.saveNewMessage(message);
                 console.log(res);
                 break;
+            case "conversation.created":
+                con;
         }
         res.json({});
     }

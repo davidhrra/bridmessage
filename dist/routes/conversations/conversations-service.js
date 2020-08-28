@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllWebhooks = exports.deleteWebhook = exports.createNewWebhook = exports.replyAudioToConversation = exports.replyFileToConversation = exports.replyImageToConversation = exports.replyMessageToConversation = void 0;
+exports.createConversation = exports.getAllWebhooks = exports.deleteWebhook = exports.createNewWebhook = exports.replyAudioToConversation = exports.replyFileToConversation = exports.replyImageToConversation = exports.replyMessageToConversation = void 0;
 const message_bird_1 = __importDefault(require("../../utils/message-bird"));
 const config_1 = require("../../config");
 const axios_1 = __importDefault(require("axios"));
+const Conversation = require('../../models/Conversation');
 function replyMessageToConversation(id, message) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -127,4 +128,17 @@ function getAllWebhooks() {
     });
 }
 exports.getAllWebhooks = getAllWebhooks;
+function createConversation(conversation) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const newConversation = new Conversation(conversation);
+            const createdConversation = yield newConversation.save();
+            return createdConversation;
+        }
+        catch (err) {
+            return err;
+        }
+    });
+}
+exports.createConversation = createConversation;
 //# sourceMappingURL=conversations-service.js.map
