@@ -1,8 +1,18 @@
 import express from 'express';
 import morgan from 'morgan';
+import mongoose from 'mongoose';
 import { conversationsRouter } from './routes';
+import Axios from 'axios';
 
 require('dotenv').config();
+
+Axios.defaults.headers.common['Authorization'] = `AccessKey ${process.env.PROD_KEY}`;
+Axios.defaults.headers.common['Content-Type'] = 'application/json';
+Axios.defaults.headers.common['Accept'] = 'application/json';
+
+mongoose.connect('mongodb://localhost/messageBirdTest')
+    .then(db => console.log('MongoDB connected'))
+    .catch(err => console.log(err));
 
 const port = process.env.SERVER_PORT || 3000;
 const app = express();
@@ -16,4 +26,3 @@ app.use('/conversations', conversationsRouter);
 
 app.listen(app.get('port'), () => console.log('Server running on ' + app.get('port')));
 
-  

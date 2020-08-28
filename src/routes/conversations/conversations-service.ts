@@ -1,94 +1,80 @@
-import messagebird from './../../utils/message-bird';
+import messagebird from '../../utils/message-bird';
+import { BASE_MESSSAGE_BIRD } from '../../config';
+import Axios from 'axios';
+import { response } from 'express';
 
-export function replyMessageToConversation(id: string, message: string) {
-    messagebird.conversations.reply(id, {
-        type: 'text',
-        content: {
-            text: message
-        }
-    }, function (err, response) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        console.log(response);
-    });
-}
-
-export function replyImageToConversation(id: string, url: string, caption) {
-    messagebird.conversations.reply(id, {
-        type: 'image',
-        content: {
-            image: {
-                url: url,
-                caption: caption
+export async function replyMessageToConversation(id: string, message: string) {
+    try {
+        const url = `${BASE_MESSSAGE_BIRD}/conversations/${id}/messages`;
+        const res = await Axios.post(url, {
+            type: 'text',
+            content: {
+                text: message
             }
-        }
-    }, function (err, response) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        console.log(response);
-    });
+        });
+        return res.data;
+    } catch (err) {
+        return err.response.data;
+    }
 }
 
-export function replyFileToConversation(id: string, url: string, caption) {
-    messagebird.conversations.reply(id, {
-        type: 'file',
-        content: {
-            file: {
-                url: url,
-                caption: caption
+export async function replyImageToConversation(id: string, url: string, caption) {
+    try {
+        const requestUrl = `${BASE_MESSSAGE_BIRD}/conversations/${id}/messages`;
+        const res = await Axios.post(requestUrl, {
+            type: 'image',
+            content: {
+                image: {
+                    url: url,
+                    caption: caption
+                }
             }
-        }
-    }, function (err, response) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        console.log(response);
-    });
+        });
+        return res.data;
+    } catch (err) {
+        return err.response.data;
+    }
 }
 
-export function replyAudioToConversation(id: string, url: string, caption) {
-    messagebird.conversations.reply(id, {
-        type: 'audio',
-        content: {
-            audio: {
-                url: url,
-                caption: caption
+export async function replyFileToConversation(id: string, url: string, caption) {
+    try {
+        const requestUrl = `${BASE_MESSSAGE_BIRD}/conversations/${id}/messages`;
+        const res = await Axios.post(requestUrl, {
+            type: 'file',
+            content: {
+                file: {
+                    url: url,
+                    caption: caption
+                }
             }
-        }
-    }, function (err, response) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        console.log(response);
-    });
+        });
+        return res.data;
+    } catch (err) {
+        return err.response.data;
+    }
 }
 
-export function createNewConversationByChannel(number: string, channelId: string) {
-    messagebird.conversations.start({
-        to: number,
-        channelId: channelId,
-        type: 'text',
-        content: {
-            text: 'Hello!'
-        }
-    }, function (err, response) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        console.log(response);
-    });
+export async function replyAudioToConversation(id: string, url: string, caption) {
+    try {
+        const requestUrl = `${BASE_MESSSAGE_BIRD}/conversations/${id}/messages`;
+        const res = await Axios.post(requestUrl, {
+            type: 'audio',
+            content: {
+                audio: {
+                    url: url,
+                    caption: caption
+                }
+            }
+        });
+        return res.data;
+    } catch (err) {
+        return err.response.data;
+    }
 }
 
-export function createNewWebhook(events: string[], channelId: string, url: string){
-    messagebird.conversations.webhooks.create({events, channelId, url}, function(err, response){
-        if(err){
+export function createNewWebhook(events: string[], channelId: string, url: string) {
+    messagebird.conversations.webhooks.create({ events, channelId, url }, function (err, response) {
+        if (err) {
             console.log(err)
             return;
         }
@@ -96,9 +82,9 @@ export function createNewWebhook(events: string[], channelId: string, url: strin
     })
 }
 
-export function deleteWebhook(id:string){
-    messagebird.conversations.webhooks.delete(id, function(err, response){
-        if(err){
+export function deleteWebhook(id: string) {
+    messagebird.conversations.webhooks.delete(id, function (err, response) {
+        if (err) {
             console.log(err)
             return;
         }
@@ -106,9 +92,9 @@ export function deleteWebhook(id:string){
     })
 }
 
-export function getAllWebhooks(){
-    messagebird.conversations.webhooks.list(100, 0, function(err, response){
-        if(err){
+export function getAllWebhooks() {
+    messagebird.conversations.webhooks.list(100, 0, function (err, response) {
+        if (err) {
             console.log(err)
             return;
         }
