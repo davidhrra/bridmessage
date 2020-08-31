@@ -1,7 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
-import { conversationsRouter } from './routes';
+import { conversationsRouter, APIRouter } from './routes';
 import Axios from 'axios';
 
 require('dotenv').config();
@@ -23,6 +23,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 app.use('/conversations', conversationsRouter);
+app.use('/api', APIRouter);
 
 app.listen(app.get('port'), () => console.log('Server running on ' + app.get('port')));
 

@@ -21,5 +21,6 @@ app.set('port', port);
 app.use(morgan_1.default('dev'));
 app.use(express_1.default.json());
 app.use('/conversations', routes_1.conversationsRouter);
+app.use('/api', routes_1.APIRouter);
 app.listen(app.get('port'), () => console.log('Server running on ' + app.get('port')));
 //# sourceMappingURL=index.js.map

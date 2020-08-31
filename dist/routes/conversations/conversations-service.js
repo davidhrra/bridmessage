@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createConversation = exports.getAllWebhooks = exports.deleteWebhook = exports.createNewWebhook = exports.replyAudioToConversation = exports.replyFileToConversation = exports.replyImageToConversation = exports.replyMessageToConversation = void 0;
+exports.updateConversation = exports.createConversation = exports.getAllWebhooks = exports.deleteWebhook = exports.createNewWebhook = exports.replyAudioToConversation = exports.replyFileToConversation = exports.replyImageToConversation = exports.replyMessageToConversation = void 0;
 const message_bird_1 = __importDefault(require("../../utils/message-bird"));
 const config_1 = require("../../config");
 const axios_1 = __importDefault(require("axios"));
@@ -141,4 +141,16 @@ function createConversation(conversation) {
     });
 }
 exports.createConversation = createConversation;
+function updateConversation(conversation) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const updatedConversation = yield Conversation.findOneAndUpdate({ id: conversation.id }, conversation);
+            return updatedConversation;
+        }
+        catch (err) {
+            return err;
+        }
+    });
+}
+exports.updateConversation = updateConversation;
 //# sourceMappingURL=conversations-service.js.map

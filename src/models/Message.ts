@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Message = new Schema({
     messageChannelId: String,
     conversationId: String,
+    id: String,
     channelId: String,
     platform: String,
     to: String,

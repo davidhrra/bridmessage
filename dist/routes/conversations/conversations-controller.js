@@ -102,35 +102,26 @@ exports.router.get('/all/webhook', (req, res, next) => {
 });
 exports.router.post('/event', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { type, message } = req.body;
+        const { type, message, conversation, contact } = req.body;
+        let eventResponse = null;
         switch (type) {
-            // case "message.created":
-            //     if (message && message.direction === 'received' && message.type === 'text') {
-            //         const { conversationId, content } = message;
-            //         if (content.text.toLowerCase() === 'audio') {
-            //             const url = "https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg";
-            //             const caption = 'audio.ogg';
-            //             replyAudioToConversation(conversationId, url, caption);
-            //         } if (content.text.toLowerCase() === 'image') {
-            //             const url = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png";
-            //             const caption = 'imagen.png';
-            //             replyImageToConversation(conversationId, url, caption);
-            //         } if (content.text.toLowerCase() === 'file') {
-            //             const url = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
-            //             const caption = 'dummy.pdf';
-            //             replyFileToConversation(conversationId, url, caption);
-            //         } if (content.text.toLowerCase() === 'text') {
-            //             const message = 'Texto de prueba';
-            //             replyMessageToConversation(conversationId, message);
-            //         }
-            //     }
-            //     break;
             case "message.created":
-                const res = yield messages_service_1.saveNewMessage(message);
-                console.log(res);
+                eventResponse = yield messages_service_1.saveNewMessage(message);
+                if (message && message.direction === 'received' && message.type === 'text')
+                    messages_service_1.sendDefaultReply(message);
                 break;
             case "conversation.created":
-                con;
+                conversation.contact = contact;
+                eventResponse = yield conversations_service_1.createConversation(conversation);
+                eventResponse = yield conversations_service_1.replyMessageToConversation(message.id, 'Hola! Bienvenido al bot');
+                break;
+            case "conversation.updated":
+                conversation.contact = contact;
+                eventResponse = yield conversations_service_1.updateConversation(conversation);
+                break;
+            case "message.updated":
+                eventResponse = yield messages_service_1.updateMessage(message);
+                break;
         }
         res.json({});
     }

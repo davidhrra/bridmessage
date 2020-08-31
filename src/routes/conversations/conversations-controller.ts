@@ -7,10 +7,14 @@ import {
     createNewWebhook,
     deleteWebhook,
     getAllWebhooks,
+    createConversation,
+    updateConversation
 } from './conversations-service'
 
 import {
-    saveNewMessage
+    saveNewMessage,
+    sendDefaultReply,
+    updateMessage,
 } from './messages-service';
 
 export const router = express.Router({
@@ -100,53 +104,49 @@ router.get('/all/webhook', (req, res, next) => {
 
 router.post('/event', async (req, res, next) => {
     try {
-        const { type, message } = req.body;
+        const { type, message, conversation, contact } = req.body;
+
+        let eventResponse = null;
+
         switch (type) {
-            // case "message.created":
-            //     if (message && message.direction === 'received' && message.type === 'text') {
-            //         const { conversationId, content } = message;
-
-            //         if (content.text.toLowerCase() === 'audio') {
-
-            //             const url = "https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg";
-            //             const caption = 'audio.ogg';
-
-            //             replyAudioToConversation(conversationId, url, caption);
-
-            //         } if (content.text.toLowerCase() === 'image') {
-
-            //             const url = "https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png";
-            //             const caption = 'imagen.png';
-
-            //             replyImageToConversation(conversationId, url, caption);
-
-            //         } if (content.text.toLowerCase() === 'file') {
-
-            //             const url = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
-            //             const caption = 'dummy.pdf';
-
-            //             replyFileToConversation(conversationId, url, caption);
-
-            //         } if (content.text.toLowerCase() === 'text') {
-
-            //             const message = 'Texto de prueba';
-
-            //             replyMessageToConversation(conversationId, message);
-
-            //         }
-            //     }
-            //     break;
             case "message.created":
-                const res = await saveNewMessage(message);
-                console.log(res);
+
+                eventResponse = await saveNewMessage(message);
+
+                if (message && message.direction === 'received' && message.type === 'text') sendDefaultReply(message);
+
                 break;
+
             case "conversation.created":
-                con
+
+                conversation.contact = contact;
+
+                eventResponse = await createConversation(conversation);
+                eventResponse = await replyMessageToConversation(message.id, 'Hola! Bienvenido al bot')
+
+                break;
+
+            case "conversation.updated":
+
+                conversation.contact = contact;
+
+                eventResponse = await updateConversation(conversation);
+
+                break;
+
+            case "message.updated":
+
+                eventResponse = await updateMessage(message);
+
+                break;
+
         }
         res.json({})
     } catch (err) {
         next(err)
     }
 });
+
+
 
 

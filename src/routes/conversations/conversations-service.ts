@@ -1,7 +1,7 @@
 import messagebird from '../../utils/message-bird';
 import { BASE_MESSSAGE_BIRD } from '../../config';
 import Axios from 'axios';
-const Conversation = require('../../models/Conversation')
+const Conversation = require('../../models/Conversation');
 
 export async function replyMessageToConversation(id: string, message: string) {
     try {
@@ -107,6 +107,14 @@ export async function createConversation(conversation:any){
         const newConversation = new Conversation(conversation);
         const createdConversation =  await newConversation.save();
         return createdConversation;
+    }catch(err){
+        return err;
+    }
+}
+export async function updateConversation(conversation:any){
+    try{
+        const updatedConversation = await Conversation.findOneAndUpdate({id: conversation.id}, conversation);
+        return updatedConversation;
     }catch(err){
         return err;
     }
